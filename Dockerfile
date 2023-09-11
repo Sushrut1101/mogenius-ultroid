@@ -1,15 +1,24 @@
+# Base Image
 FROM archlinux:base-devel
+
+# Install needed dependencies
 RUN pacman -Syyu --noconfirm
 RUN pacman -S --noconfirm \
     python3 python-pip python-setuptools git curl ffmpeg mediainfo \
-    neofetch tmate speedtest-cli
-ARG USER=root
-USER $USER
+    neofetch tmate speedtest-cli python-virtualenv
+
+# Setup virtual environment
+RUN virtualenv /var/.venv
+ENV PATH="/var/.venv/bin:$PATH"
+
+# Clone repository
+RUN git clone https://github.com/TeamUltroid/Ultroid.git /app
+
+# Set working directory
 WORKDIR /app
-COPY requirements.txt ./requirements.txt
-RUN pip3 install -r requirements.txt
-COPY start.sh start.sh
-COPY app.py app.py
-EXPOSE 5000
-RUN chmod +x /app/start.sh
-CMD ["./start.sh"]
+
+# Run Ultroid Setup
+RUN bash installer.sh
+
+# Setup CMD
+CMD ["bash", "startup"]
