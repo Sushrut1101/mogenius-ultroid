@@ -1,6 +1,10 @@
 # Base Image
 FROM archlinux:base-devel
 
+# Setup Timezone
+ENV TZ=Asia/Kolkata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Install needed dependencies
 RUN pacman -Syyu --noconfirm
 RUN pacman -S --noconfirm \
