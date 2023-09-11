@@ -20,5 +20,8 @@ WORKDIR /app
 # Run Ultroid Setup
 RUN bash installer.sh
 
+# Install more python dependencies
+RUN pip install -U tzdata
+
 # Setup CMD
 CMD ["bash", "startup"]
